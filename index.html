@@ -342,7 +342,7 @@
       </div>
       <div class="chart-card">
         <h3>Final Assignments</h3>
-        <div class="placeholder">Role assignments will be finalised during the VRRR session.</div>
+        <div id="roleAssignments" class="placeholder">Role assignments will be finalised during the VRRR session.</div>
       </div>
     </div>
   </div>
@@ -490,29 +490,293 @@ const chartDefaults = {
   }
 };
 
-// ==================== DATA (placeholder — will be populated from form responses) ====================
+// ==================== DATA ====================
+// Replace this entire block with the output of `python3 tetra_scoring.py responses.csv`
+// once form responses are in. Default values let the dashboard render with empty
+// placeholders before form-day.
 const DATA = {
-  // Singapore URA planning area centroids (lat, lng) — for Leaflet markers + 3km privacy circles
-  planningAreaLatLng: {
-    'Ang Mo Kio': [1.3691, 103.8454], 'Bedok': [1.3236, 103.9273],
-    'Bishan': [1.3526, 103.8479], 'Bukit Batok': [1.3590, 103.7637],
-    'Bukit Merah': [1.2819, 103.8239], 'Bukit Panjang': [1.3777, 103.7719],
-    'Bukit Timah': [1.3294, 103.8021], 'Choa Chu Kang': [1.3840, 103.7470],
-    'Clementi': [1.3162, 103.7649], 'Geylang': [1.3201, 103.8918],
-    'Hougang': [1.3613, 103.8863], 'Jurong East': [1.3329, 103.7436],
-    'Jurong West': [1.3404, 103.7090], 'Kallang': [1.3100, 103.8636],
-    'Marine Parade': [1.3019, 103.9050], 'Novena': [1.3203, 103.8434],
-    'Pasir Ris': [1.3722, 103.9494], 'Punggol': [1.3984, 103.9072],
-    'Queenstown': [1.2942, 103.7860], 'Sembawang': [1.4491, 103.8185],
-    'Sengkang': [1.3868, 103.8914], 'Serangoon': [1.3554, 103.8679],
-    'Tampines': [1.3496, 103.9568], 'Toa Payoh': [1.3343, 103.8563],
-    'Woodlands': [1.4382, 103.7891], 'Yishun': [1.4304, 103.8354],
-    'Tengah': [1.3691, 103.7359]
+  // Order: Fire, Earth, Water, Air
+  tetra4D: [0, 0, 0, 0],
+  // Order: Task, People, Inward, Outward, Practical, Conceptual
+  tetra6D: [0, 0, 0, 0, 0, 0],
+  success: {
+    labels: ["Top the course (Grade A+)","Achieve a strong Grade A","Solid Grade B+ or above","Build a lasting professional network","Deepen strategic thinking capability","Personal growth and self-awareness","Earn recognition or accolades","Cruise comfortably — absorb without competing","Get promoted post-course"],
+    data: [0,0,0,0,0,0,0,0,0]
   },
-  // Member roster — populated by tetra_scoring.py output after form responses arrive.
-  // Each entry: { name: "...", primary: "Earth"|"Air"|"Water"|"Fire", secondary: "...", planning_area: "Bedok" }
-  members: []
+  synVision: {
+    labels: ["High-performing team that pushes each other","Supportive environment — no one left behind","Balanced — serious when needed and fun when possible","A group that stays connected after the course","Efficient — do what's needed and respect everyone's time","A safe space to challenge ideas without ego"],
+    data: [0,0,0,0,0,0]
+  },
+  hobbies: {
+    labels: ["Sports","Gym & Fitness","Running & Cycling","Gaming","Reading","Travel","Food & Cooking","Music","Photography & Videography","Investing & Trading","Tech & Gadgets","Outdoor activities","Arts & Crafts","Volunteering","Cars & Motorsport","Family time"],
+    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  },
+  motivators: {
+    labels: ["Clear goals and targets","Recognition from peers","Autonomy and trust","Learning something new","Healthy competition","Teamwork and camaraderie","Purpose and meaning","Financial incentives","Seeing tangible results"],
+    data: [0,0,0,0,0,0,0,0,0]
+  },
+  willingRoles: {
+    labels: ["Syndicate Leader","Deputy Leader","Motivator","Timekeeper","Red Teamer","Boundary Spanner","Scribe","Quality Controller","Social Secretary","Tech Lead","Mediator"],
+    data: [0,0,0,0,0,0,0,0,0,0,0]
+  },
+  rules: [],
+  members: [],
+  planningAreaLatLng: {
+    "Ang Mo Kio": [1.3691, 103.8454], "Bedok": [1.3236, 103.9273],
+    "Bishan": [1.3526, 103.8479], "Bukit Batok": [1.3590, 103.7637],
+    "Bukit Merah": [1.2819, 103.8239], "Bukit Panjang": [1.3777, 103.7719],
+    "Bukit Timah": [1.3294, 103.8021], "Choa Chu Kang": [1.3840, 103.7470],
+    "Clementi": [1.3162, 103.7649], "Geylang": [1.3201, 103.8918],
+    "Hougang": [1.3613, 103.8863], "Jurong East": [1.3329, 103.7436],
+    "Jurong West": [1.3404, 103.7090], "Kallang": [1.3100, 103.8636],
+    "Marine Parade": [1.3019, 103.9050], "Novena": [1.3203, 103.8434],
+    "Pasir Ris": [1.3722, 103.9494], "Punggol": [1.3984, 103.9072],
+    "Queenstown": [1.2942, 103.7860], "Sembawang": [1.4491, 103.8185],
+    "Sengkang": [1.3868, 103.8914], "Serangoon": [1.3554, 103.8679],
+    "Tampines": [1.3496, 103.9568], "Toa Payoh": [1.3343, 103.8563],
+    "Woodlands": [1.4382, 103.7891], "Yishun": [1.4304, 103.8354],
+    "Tengah": [1.3691, 103.7359]
+  }
 };
+
+// ==================== RENDER FUNCTIONS ====================
+const ELEMENT_TAG_CLASS = { Earth: 'tag-earth', Air: 'tag-air', Water: 'tag-water', Fire: 'tag-fire' };
+
+function escapeHTML(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+function memberInitials(name) {
+  return (name || '?').split(/\s+/).map(s => (s[0] || '')).slice(0, 2).join('').toUpperCase();
+}
+
+function renderPeople() {
+  const grid = document.getElementById('peopleGrid');
+  if (!grid) return;
+  if (!DATA.members.length) {
+    grid.innerHTML = '<div class="placeholder">Pen Pictures will appear here once form responses are processed.</div>';
+    return;
+  }
+  grid.innerHTML = DATA.members.map(m => {
+    const primaryTag = m.primary ? '<span class="tag ' + ELEMENT_TAG_CLASS[m.primary] + '">' + escapeHTML(m.primary) + '</span>' : '';
+    const secondaryTag = m.secondary ? '<span class="tag ' + ELEMENT_TAG_CLASS[m.secondary] + '">+' + escapeHTML(m.secondary) + '</span>' : '';
+    const hobbiesTags = (m.hobbies || []).slice(0, 3).map(h => '<span class="tag">' + escapeHTML(h) + '</span>').join('');
+    const avatarBg = ELEMENT_COLORS[m.primary] || '#888';
+    const subParts = [m.rank, m.unit].filter(Boolean).map(escapeHTML).join(' · ');
+    return '<div class="card">' +
+      '<div class="card-header">' +
+        '<div class="card-avatar" style="background:' + avatarBg + '">' + escapeHTML(memberInitials(m.name)) + '</div>' +
+        '<div><div class="card-name">' + escapeHTML(m.name) + '</div>' +
+        '<div class="card-sub">' + subParts + '</div></div>' +
+      '</div>' +
+      '<div class="card-body">' +
+        (m.fun_fact ? '<em>' + escapeHTML(m.fun_fact) + '</em><br><br>' : '') +
+        (m.best_role ? '<strong>Role:</strong> ' + escapeHTML(m.best_role) + '<br>' : '') +
+        (m.motivation ? '<strong>Here for:</strong> ' + escapeHTML(m.motivation) : '') +
+      '</div>' +
+      '<div class="card-tags">' + primaryTag + secondaryTag + hobbiesTags + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderContacts() {
+  const grid = document.getElementById('contactsGrid');
+  if (!grid) return;
+  if (!DATA.members.length) {
+    grid.innerHTML = '<div class="placeholder">Contact cards will populate from form responses.</div>';
+    return;
+  }
+  grid.innerHTML = DATA.members.map(m => {
+    const avatarBg = ELEMENT_COLORS[m.primary] || '#888';
+    return '<div class="card">' +
+      '<div class="card-header">' +
+        '<div class="card-avatar" style="background:' + avatarBg + '">' + escapeHTML(memberInitials(m.name)) + '</div>' +
+        '<div><div class="card-name">' + escapeHTML(m.name) + '</div>' +
+        '<div class="card-sub">' + escapeHTML(m.full_name || '') + '</div></div>' +
+      '</div>' +
+      '<div class="card-body">' +
+        escapeHTML(m.rank || '') + ' · ' + escapeHTML(m.unit || '') + '<br>' +
+        (m.mobile ? '📞 <a href="tel:' + escapeHTML(m.mobile) + '">' + escapeHTML(m.mobile) + '</a><br>' : '') +
+        (m.email ? '✉️ <a href="mailto:' + escapeHTML(m.email) + '">' + escapeHTML(m.email) + '</a>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderRules() {
+  const tbody = document.getElementById('rulesBody');
+  if (!tbody) return;
+  if (!DATA.rules.length) {
+    tbody.innerHTML = '<tr><td colspan="3" class="placeholder">Rules will populate from form responses</td></tr>';
+    return;
+  }
+  tbody.innerHTML = DATA.rules.map(r => {
+    const statusClass = r.status === 'adopted' ? 'status-adopted' : (r.status === 'discuss' ? 'status-discuss' : 'status-dropped');
+    const statusLabel = r.status === 'adopted' ? '✓ Adopted' : (r.status === 'discuss' ? '• Discuss' : '✗ Dropped');
+    const fillColor = r.status === 'adopted' ? '#27ae60' : (r.status === 'discuss' ? '#d4a017' : '#a89f91');
+    return '<tr>' +
+      '<td>' + escapeHTML(r.norm) + '</td>' +
+      '<td><strong>' + r.pct + '%</strong> (' + r.votes + ' votes)' +
+        '<div class="pct-bar"><div class="pct-fill" style="width:' + r.pct + '%; background:' + fillColor + '"></div></div></td>' +
+      '<td class="' + statusClass + '">' + statusLabel + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function renderRoleAssignments() {
+  const container = document.getElementById('roleAssignments');
+  if (!container) return;
+  if (!DATA.members.length) return;
+  const byRole = {};
+  DATA.members.forEach(m => {
+    if (m.best_role) (byRole[m.best_role] = byRole[m.best_role] || []).push(m.name);
+  });
+  const html = Object.entries(byRole).map(([role, names]) =>
+    '<div style="margin-bottom:0.5rem;"><strong>' + escapeHTML(role) + '</strong>: ' + names.map(escapeHTML).join(', ') + '</div>'
+  ).join('');
+  if (html) {
+    container.classList.remove('placeholder');
+    container.innerHTML = html;
+  }
+}
+
+function initCharts() {
+  // Tetra Distribution doughnut (Overview)
+  new Chart(document.getElementById('tetraChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['🔥 Fire', '🌍 Earth', '💧 Water', '🌬️ Air'],
+      datasets: [{
+        data: DATA.tetra4D,
+        backgroundColor: ['#e8a49c','#d4c98a','#8bb8d4','#b8a0d0'],
+        borderColor: ['#c0392b','#7d6608','#2471a3','#7d3c98'],
+        borderWidth: 2
+      }]
+    },
+    options: chartDefaults
+  });
+
+  // Vision priorities (Overview - Q13)
+  new Chart(document.getElementById('visionChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.success.labels,
+      datasets: [{ data: DATA.success.data, backgroundColor: '#8fae8b', borderRadius: 4 }]
+    },
+    options: { ...chartDefaults, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } },
+               y: { ticks: { color: '#6b7f7a', font: { size: 9 } }, grid: { display: false } } }
+    }
+  });
+
+  // Hobbies (Overview - Q16)
+  new Chart(document.getElementById('hobbyChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.hobbies.labels,
+      datasets: [{ data: DATA.hobbies.data, backgroundColor: '#a89f91', borderRadius: 4 }]
+    },
+    options: { ...chartDefaults,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#6b7f7a', font: { size: 8 }, maxRotation: 60 }, grid: { display: false } },
+               y: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } } }
+    }
+  });
+
+  // Motivators (Overview - Q18)
+  new Chart(document.getElementById('motivationChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.motivators.labels,
+      datasets: [{ data: DATA.motivators.data, backgroundColor: '#5b7b6f', borderRadius: 4 }]
+    },
+    options: { ...chartDefaults,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#6b7f7a', font: { size: 8 }, maxRotation: 60 }, grid: { display: false } },
+               y: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } } }
+    }
+  });
+
+  // Tetra Primary polar (Tetra Map)
+  new Chart(document.getElementById('tetraPrimaryChart'), {
+    type: 'polarArea',
+    data: {
+      labels: ['🔥 Fire', '🌍 Earth', '💧 Water', '🌬️ Air'],
+      datasets: [{ data: DATA.tetra4D,
+        backgroundColor: ['rgba(192,57,43,0.4)','rgba(125,102,8,0.4)','rgba(36,113,163,0.4)','rgba(125,60,152,0.4)'],
+        borderColor: ['#c0392b','#7d6608','#2471a3','#7d3c98'], borderWidth: 2
+      }]
+    },
+    options: { ...chartDefaults,
+      scales: { r: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } } }
+    }
+  });
+
+  // Team 6D — Paired Views (radar)
+  new Chart(document.getElementById('tetra6DChart'), {
+    type: 'radar',
+    data: {
+      labels: ['Task (Air+Earth)', 'People (Fire+Water)', 'Inward (Air+Water)', 'Outward (Fire+Earth)', 'Practical (Earth+Water)', 'Conceptual (Air+Fire)'],
+      datasets: [{ label: 'Team 6D', data: DATA.tetra6D,
+        backgroundColor: 'rgba(91,123,111,0.2)', borderColor: '#5b7b6f', borderWidth: 2,
+        pointBackgroundColor: '#5b7b6f'
+      }]
+    },
+    options: { ...chartDefaults,
+      scales: { r: { ticks: { color: '#6b7f7a', display: false }, grid: { color: '#d5cfc3' },
+        pointLabels: { color: '#6b7f7a', font: { size: 9 } } } }
+    }
+  });
+
+  // Success metrics (Vision tab — same Q13 data, detail view)
+  new Chart(document.getElementById('successChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.success.labels,
+      datasets: [{ data: DATA.success.data, backgroundColor: '#8fae8b', borderRadius: 4 }]
+    },
+    options: { ...chartDefaults, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } },
+               y: { ticks: { color: '#6b7f7a', font: { size: 10 } }, grid: { display: false } } }
+    }
+  });
+
+  // Syndicate vision themes (Q15)
+  new Chart(document.getElementById('synVisionChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.synVision.labels,
+      datasets: [{ data: DATA.synVision.data, backgroundColor: '#b8a0d0', borderRadius: 4 }]
+    },
+    options: { ...chartDefaults,
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#6b7f7a', font: { size: 9 }, maxRotation: 30 }, grid: { display: false } },
+               y: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } } }
+    }
+  });
+
+  // Role volunteers (Q24)
+  new Chart(document.getElementById('roleChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.willingRoles.labels,
+      datasets: [{ data: DATA.willingRoles.data, backgroundColor: '#5b7b6f', borderRadius: 4 }]
+    },
+    options: { ...chartDefaults, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { color: '#6b7f7a' }, grid: { color: '#d5cfc3' } },
+               y: { ticks: { color: '#6b7f7a', font: { size: 10 } }, grid: { display: false } } }
+    }
+  });
+
+  // Render dynamic grids/tables
+  renderPeople();
+  renderContacts();
+  renderRules();
+  renderRoleAssignments();
+}
 
 function initCharts() {
   // Tetra distribution (doughnut)
