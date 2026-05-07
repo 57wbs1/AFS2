@@ -183,52 +183,6 @@
   .cal-wrap { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--card); }
   .cal-wrap iframe { display: block; width: 100%; height: 550px; border: none; }
 
-  /* DEBRIEF SECTION */
-  .debrief-card {
-    background: var(--card); border-radius: 12px; padding: 1.5rem;
-    border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    max-width: 700px; margin: 0 auto;
-  }
-  .debrief-card h3 { font-size: 1rem; color: var(--header-bg); margin-bottom: 0.25rem; }
-  .debrief-desc { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; line-height: 1.5; }
-  .debrief-select {
-    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);
-    background: var(--bg); color: var(--text); font-size: 0.9rem; margin-bottom: 0.75rem; outline: none;
-  }
-  .debrief-select:focus { border-color: var(--accent); }
-  .debrief-textarea {
-    width: 100%; min-height: 120px; padding: 12px; border-radius: 8px;
-    border: 1px solid var(--border); background: var(--bg); color: var(--text);
-    font-size: 0.9rem; font-family: inherit; resize: vertical; outline: none;
-    margin-bottom: 0.75rem;
-  }
-  .debrief-textarea:focus { border-color: var(--accent); }
-  .debrief-type { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
-  .debrief-type label {
-    padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
-    font-size: 0.8rem; cursor: pointer; transition: all 0.2s; background: var(--bg);
-  }
-  .debrief-type input { display: none; }
-  .debrief-type input:checked + span { background: var(--accent); color: white; border-color: var(--accent); }
-  .debrief-submit {
-    padding: 10px 24px; border-radius: 8px; border: none;
-    background: var(--accent); color: white; font-size: 0.9rem;
-    cursor: pointer; font-weight: 600; transition: background 0.2s;
-  }
-  .debrief-submit:hover { background: var(--accent-dark); }
-  .debrief-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-  .debrief-success {
-    display: none; padding: 12px; border-radius: 8px; background: #e8f5e9;
-    color: #2e7d32; font-size: 0.85rem; text-align: center; margin-top: 0.75rem;
-  }
-  .debrief-wall { margin-top: 1.5rem; }
-  .debrief-wall h4 { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.75rem; }
-  .debrief-item {
-    background: var(--bg); border-radius: 8px; padding: 12px; margin-bottom: 0.5rem;
-    border-left: 3px solid var(--sage); font-size: 0.85rem; line-height: 1.5;
-  }
-  .debrief-item .debrief-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; }
-
   /* RESPONSIVE */
   @media (max-width: 768px) {
     .chart-row { grid-template-columns: 1fr; }
@@ -280,7 +234,6 @@
     <button class="nav-btn" onclick="showSection('sec-roles')">Roles</button>
     <button class="nav-btn" onclick="showSection('sec-contacts')">Contacts</button>
     <button class="nav-btn" onclick="showSection('sec-calendar')">Calendar</button>
-    <button class="nav-btn" onclick="showSection('sec-debrief')">Debrief</button>
     <button class="nav-btn" onclick="showSection('sec-charter')">Charter</button>
   </div>
 
@@ -313,15 +266,15 @@
   <!-- TETRA MAP -->
   <div class="section" id="sec-tetra">
     <h2 class="section-title">🔥🌍💧🌬️ Tetra Composition Map</h2>
-    <p class="section-subtitle">Primary and secondary element distributions across the syndicate</p>
+    <p class="section-subtitle">SAF Tetra (TetraMap™) — Team 4D element distribution and Team 6D paired orientations</p>
     <div class="chart-row">
       <div class="chart-card">
-        <h3>Primary Elements</h3>
+        <h3>Team 4D — Primary Elements</h3>
         <div class="chart-wrap"><canvas id="tetraPrimaryChart"></canvas></div>
       </div>
       <div class="chart-card">
-        <h3>Element Pairings</h3>
-        <div class="chart-wrap"><canvas id="tetraPairingChart"></canvas></div>
+        <h3>Team 6D — Paired Views</h3>
+        <div class="chart-wrap"><canvas id="tetra6DChart"></canvas></div>
       </div>
     </div>
   </div>
@@ -419,32 +372,6 @@
     </div>
   </div>
 
-  <!-- NON-CONFRONTATIONAL DEBRIEF -->
-  <div class="section" id="sec-debrief">
-    <h2 class="section-title">🕊️ Non-Confrontational Debrief</h2>
-    <p class="section-subtitle">Anonymous feedback wall — share observations constructively. All submissions are anonymous.</p>
-    <div class="debrief-card">
-      <h3>Share Feedback</h3>
-      <p class="debrief-desc">Recognise good work or flag something that could be better. Your name is never recorded.</p>
-      <select class="debrief-select" id="debriefWho">
-        <option value="">Who is this about? (select a wingman)</option>
-        <option value="General / Team">General — the whole team</option>
-      </select>
-      <div class="debrief-type" id="debriefType">
-        <label><input type="radio" name="dtype" value="kudos" checked><span style="padding:6px 14px;border-radius:20px;border:1px solid var(--border);display:inline-block;">👏 Kudos</span></label>
-        <label><input type="radio" name="dtype" value="suggestion"><span style="padding:6px 14px;border-radius:20px;border:1px solid var(--border);display:inline-block;">💡 Suggestion</span></label>
-        <label><input type="radio" name="dtype" value="flag"><span style="padding:6px 14px;border-radius:20px;border:1px solid var(--border);display:inline-block;">🚩 Flag</span></label>
-      </div>
-      <textarea class="debrief-textarea" id="debriefText" placeholder="Write your feedback here... Be specific and constructive."></textarea>
-      <button class="debrief-submit" id="debriefBtn" onclick="submitDebrief()">Submit Anonymously</button>
-      <div class="debrief-success" id="debriefOk">✓ Feedback submitted anonymously. Thank you!</div>
-    </div>
-    <div class="debrief-wall" id="debriefWall">
-      <h4>Recent Feedback</h4>
-      <div class="placeholder" id="debriefEmpty">No feedback yet — be the first to share.</div>
-    </div>
-  </div>
-
   <!-- CHARTER -->
   <div class="section" id="sec-charter">
     <h2 class="section-title">📜 Team Charter</h2>
@@ -495,56 +422,6 @@ function showSection(id) {
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
 }
-
-// ==================== DEBRIEF ====================
-const DEBRIEF_SHEET_URL = ''; // Will be set when Apps Script is deployed
-function submitDebrief() {
-  const who = document.getElementById('debriefWho').value;
-  const text = document.getElementById('debriefText').value.trim();
-  const type = document.querySelector('input[name="dtype"]:checked')?.value || 'kudos';
-  if (!who || !text) { alert('Please select a wingman and write your feedback.'); return; }
-  const btn = document.getElementById('debriefBtn');
-  btn.disabled = true; btn.textContent = 'Submitting...';
-  // Store locally for display
-  const entries = JSON.parse(localStorage.getItem('af_debrief') || '[]');
-  entries.unshift({ who, type, text, ts: new Date().toISOString() });
-  localStorage.setItem('af_debrief', JSON.stringify(entries));
-  // If Apps Script URL configured, also POST there
-  if (DEBRIEF_SHEET_URL) {
-    fetch(DEBRIEF_SHEET_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ who, type, text, ts: new Date().toISOString() })
-    }).catch(() => {});
-  }
-  // UI feedback
-  document.getElementById('debriefOk').style.display = 'block';
-  document.getElementById('debriefText').value = '';
-  document.getElementById('debriefWho').value = '';
-  btn.disabled = false; btn.textContent = 'Submit Anonymously';
-  setTimeout(() => { document.getElementById('debriefOk').style.display = 'none'; }, 3000);
-  renderDebrief();
-}
-function renderDebrief() {
-  const entries = JSON.parse(localStorage.getItem('af_debrief') || '[]');
-  const wall = document.getElementById('debriefWall');
-  const empty = document.getElementById('debriefEmpty');
-  if (entries.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  const icons = { kudos: '👏', suggestion: '💡', flag: '🚩' };
-  let html = '<h4>Recent Feedback</h4>';
-  entries.slice(0, 20).forEach(e => {
-    const d = new Date(e.ts);
-    const when = d.toLocaleDateString('en-SG', { day:'numeric', month:'short' });
-    html += '<div class="debrief-item">' +
-      '<strong>' + (icons[e.type]||'') + ' ' + (e.who||'Team') + '</strong><br>' +
-      e.text.replace(/</g,'&lt;') +
-      '<div class="debrief-meta">' + when + '</div></div>';
-  });
-  wall.innerHTML = html;
-}
-// Load debrief on page show
-document.addEventListener('DOMContentLoaded', renderDebrief);
 
 // ==================== CHART DEFAULTS ====================
 const chartDefaults = {
@@ -650,12 +527,12 @@ function initCharts() {
     }
   });
 
-  // Tetra Pairings (radar)
-  new Chart(document.getElementById('tetraPairingChart'), {
+  // Team 6D — Paired Views (radar): Task / People / Inward / Outward / Practical / Conceptual
+  new Chart(document.getElementById('tetra6DChart'), {
     type: 'radar',
     data: {
-      labels: ['Fire-Earth', 'Fire-Water', 'Fire-Air', 'Earth-Water', 'Earth-Air', 'Water-Air'],
-      datasets: [{ label: 'Pairings', data: [0,0,0,0,0,0],
+      labels: ['Task (Air+Earth)', 'People (Fire+Water)', 'Inward (Air+Water)', 'Outward (Fire+Earth)', 'Practical (Earth+Water)', 'Conceptual (Air+Fire)'],
+      datasets: [{ label: 'Team 6D', data: [0,0,0,0,0,0],
         backgroundColor: 'rgba(91,123,111,0.2)', borderColor: '#5b7b6f', borderWidth: 2,
         pointBackgroundColor: '#5b7b6f'
       }]
