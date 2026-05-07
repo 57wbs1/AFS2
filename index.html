@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AFS2 — Know Your Wingman</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root {
     --fire: #c0392b;
@@ -164,17 +166,12 @@
 
   /* MAP */
   .map-container { position: relative; background: var(--card); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); }
-  .map-svg { width: 100%; max-width: 600px; margin: 0 auto; display: block; }
-  .map-dot { cursor: pointer; transition: r 0.2s; }
-  .map-dot:hover { r: 8; }
   .map-legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1rem; flex-wrap: wrap; }
-  .map-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-dim); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .map-tooltip {
-    display: none; position: absolute; background: var(--card); border: 1px solid var(--border);
-    padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; pointer-events: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;
-  }
+  .map-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--text-dim); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  /* Leaflet popup styling */
+  .leaflet-popup-content { font-family: inherit; font-size: 0.85rem; line-height: 1.5; }
+  .leaflet-popup-content strong { color: var(--header-bg); }
 
   /* PLACEHOLDER */
   .placeholder { color: var(--text-dim); font-style: italic; padding: 2rem; text-align: center; background: var(--bg-alt); border-radius: 8px; }
@@ -307,20 +304,16 @@
   <!-- WHERE WE ARE -->
   <div class="section" id="sec-map">
     <h2 class="section-title">📍 Where We Are</h2>
-    <p class="section-subtitle">Approximate locations by URA Planning Area (~3km privacy)</p>
+    <p class="section-subtitle">URA planning-area centroids with 3km privacy radius — overlapping circles surface natural carpool clusters</p>
     <div class="map-container">
-      <svg class="map-svg" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50,200 Q80,120 150,100 Q200,80 250,90 Q320,70 380,100 Q420,120 450,150 Q460,180 440,210 Q400,250 350,240 Q300,260 250,250 Q200,260 150,240 Q100,230 70,220 Z"
-              fill="var(--bg-alt)" stroke="var(--border)" stroke-width="1.5"/>
-        <text x="250" y="170" text-anchor="middle" fill="var(--text-dim)" font-size="11" font-style="italic">Singapore</text>
-      </svg>
+      <div id="leafletMap" style="width:100%; height:640px; border-radius:8px; z-index:0;"></div>
       <div class="map-legend">
-        <div class="map-legend-item"><div class="legend-dot" style="background:var(--fire)"></div> Fire</div>
-        <div class="map-legend-item"><div class="legend-dot" style="background:var(--earth)"></div> Earth</div>
-        <div class="map-legend-item"><div class="legend-dot" style="background:var(--water)"></div> Water</div>
-        <div class="map-legend-item"><div class="legend-dot" style="background:var(--air)"></div> Air</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:var(--fire)"></div> Fire (Influencer)</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:var(--earth)"></div> Earth (Driver)</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:var(--water)"></div> Water (Supporter)</div>
+        <div class="map-legend-item"><div class="legend-dot" style="background:var(--air)"></div> Air (Analyser)</div>
       </div>
-      <div class="map-tooltip" id="mapTooltip"></div>
+      <p id="mapPlaceholder" style="text-align:center; color:var(--text-dim); font-size:0.8rem; margin-top:0.75rem; font-style:italic;">Markers populate once form responses are processed. Click the map to enable scroll-zoom.</p>
     </div>
   </div>
 
@@ -421,6 +414,71 @@ function showSection(id) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
+  if (id === 'sec-map') {
+    setTimeout(() => {
+      if (!leafletMap) initMap();
+      else leafletMap.invalidateSize();
+    }, 100);
+  }
+}
+
+// ==================== MAP ====================
+let leafletMap = null;
+const ELEMENT_COLORS = {
+  'Earth': '#7d6608', 'Air': '#7d3c98', 'Water': '#2471a3', 'Fire': '#c0392b'
+};
+
+function initMap() {
+  if (leafletMap || typeof L === 'undefined') return;
+  leafletMap = L.map('leafletMap', { scrollWheelZoom: false }).setView([1.355, 103.815], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 18,
+  }).addTo(leafletMap);
+  // Scroll-zoom only when map is focused — don't hijack page scroll
+  leafletMap.on('focus', () => leafletMap.scrollWheelZoom.enable());
+  leafletMap.on('blur', () => leafletMap.scrollWheelZoom.disable());
+  leafletMap.on('click', () => leafletMap.scrollWheelZoom.enable());
+  renderMapMarkers();
+}
+
+function renderMapMarkers() {
+  if (!leafletMap || !DATA.members || !DATA.members.length) return;
+  const placeholder = document.getElementById('mapPlaceholder');
+  if (placeholder) placeholder.style.display = 'none';
+
+  // Group members by planning area so multiple wingmen in the same area get a fan-out
+  const byArea = {};
+  DATA.members.forEach(m => {
+    if (!m.planning_area) return;
+    (byArea[m.planning_area] = byArea[m.planning_area] || []).push(m);
+  });
+
+  Object.entries(byArea).forEach(([area, members]) => {
+    const coords = DATA.planningAreaLatLng[area];
+    if (!coords) return;
+    // 3km privacy radius — one per area regardless of member count
+    L.circle(coords, {
+      radius: 3000, color: '#5b7b6f', weight: 1,
+      fillColor: '#5b7b6f', fillOpacity: 0.08,
+    }).addTo(leafletMap);
+    // Marker per member, fanned out around the centroid if multiple
+    members.forEach((m, i) => {
+      const angle = (i / members.length) * 2 * Math.PI;
+      const offset = members.length > 1 ? [Math.cos(angle) * 0.004, Math.sin(angle) * 0.004] : [0, 0];
+      const marker = L.circleMarker([coords[0] + offset[0], coords[1] + offset[1]], {
+        radius: 9, color: '#fff', weight: 2,
+        fillColor: ELEMENT_COLORS[m.primary] || '#666',
+        fillOpacity: 1,
+      }).addTo(leafletMap);
+      marker.bindPopup(
+        '<strong>' + m.name + '</strong><br>' +
+        area + '<br>' +
+        'Primary: ' + (m.primary || '—') + '<br>' +
+        'Secondary: ' + (m.secondary || '—')
+      );
+    });
+  });
 }
 
 // ==================== CHART DEFAULTS ====================
@@ -434,17 +492,26 @@ const chartDefaults = {
 
 // ==================== DATA (placeholder — will be populated from form responses) ====================
 const DATA = {
-  planningAreaCoords: {
-    'Ang Mo Kio':[255,105],'Bedok':[355,175],'Bishan':[250,125],'Bukit Batok':[175,145],
-    'Bukit Merah':[225,195],'Bukit Panjang':[185,110],'Bukit Timah':[215,135],
-    'Choa Chu Kang':[165,105],'Clementi':[185,175],'Geylang':[300,170],
-    'Hougang':[305,115],'Jurong East':[155,170],'Jurong West':[130,160],
-    'Kallang':[280,165],'Marine Parade':[295,195],'Novena':[260,150],
-    'Pasir Ris':[395,130],'Punggol':[345,95],'Queenstown':[215,180],
-    'Sembawang':[265,60],'Sengkang':[325,100],'Serangoon':[295,125],
-    'Tampines':[370,145],'Toa Payoh':[265,140],'Woodlands':[230,55],
-    'Yishun':[270,80],'Tengah':[160,130]
-  }
+  // Singapore URA planning area centroids (lat, lng) — for Leaflet markers + 3km privacy circles
+  planningAreaLatLng: {
+    'Ang Mo Kio': [1.3691, 103.8454], 'Bedok': [1.3236, 103.9273],
+    'Bishan': [1.3526, 103.8479], 'Bukit Batok': [1.3590, 103.7637],
+    'Bukit Merah': [1.2819, 103.8239], 'Bukit Panjang': [1.3777, 103.7719],
+    'Bukit Timah': [1.3294, 103.8021], 'Choa Chu Kang': [1.3840, 103.7470],
+    'Clementi': [1.3162, 103.7649], 'Geylang': [1.3201, 103.8918],
+    'Hougang': [1.3613, 103.8863], 'Jurong East': [1.3329, 103.7436],
+    'Jurong West': [1.3404, 103.7090], 'Kallang': [1.3100, 103.8636],
+    'Marine Parade': [1.3019, 103.9050], 'Novena': [1.3203, 103.8434],
+    'Pasir Ris': [1.3722, 103.9494], 'Punggol': [1.3984, 103.9072],
+    'Queenstown': [1.2942, 103.7860], 'Sembawang': [1.4491, 103.8185],
+    'Sengkang': [1.3868, 103.8914], 'Serangoon': [1.3554, 103.8679],
+    'Tampines': [1.3496, 103.9568], 'Toa Payoh': [1.3343, 103.8563],
+    'Woodlands': [1.4382, 103.7891], 'Yishun': [1.4304, 103.8354],
+    'Tengah': [1.3691, 103.7359]
+  },
+  // Member roster — populated by tetra_scoring.py output after form responses arrive.
+  // Each entry: { name: "...", primary: "Earth"|"Air"|"Water"|"Fire", secondary: "...", planning_area: "Bedok" }
+  members: []
 };
 
 function initCharts() {
