@@ -496,47 +496,46 @@ const chartDefaults = {
 // placeholders before form-day.
 const DATA = {
   // Order: Fire, Earth, Water, Air
-  tetra4D: [0, 0, 0, 0],
+  tetra4D: [2, 4, 4, 3],
   // Order: Task, People, Inward, Outward, Practical, Conceptual
-  tetra6D: [0, 0, 0, 0, 0, 0],
+  tetra6D: [7, 6, 7, 6, 8, 5],
   success: {
-    labels: ["Top the course (Grade A+)","Achieve a strong Grade A","Solid Grade B+ or above","Build a lasting professional network","Deepen strategic thinking capability","Personal growth and self-awareness","Earn recognition or accolades","Cruise comfortably — absorb without competing","Get promoted post-course"],
-    data: [0,0,0,0,0,0,0,0,0]
+    labels: ["Top the course — go big or go home", "Solid Grade A — aim high but stay sane", "Comfortable B+ or above — learn well, no unnecessary stress", "Build a network that lasts beyond the course", "Deepen my strategic thinking", "Personal growth and self-awareness", "Earn recognition or accolades", "Honestly? Just survive and enjoy the ride", "Get promoted post-course"],
+    data: [1, 6, 10, 12, 10, 12, 2, 5, 4],
   },
   synVision: {
-    labels: ["High-performing team that pushes each other","Supportive environment — no one left behind","Balanced — serious when needed and fun when possible","A group that stays connected after the course","Efficient — do what's needed and respect everyone's time","A safe space to challenge ideas without ego"],
-    data: [0,0,0,0,0,0]
+    labels: ["High-performing team that pushes each other", "Supportive environment — no one gets left behind", "Balanced — serious when needed, fun when possible", "A group that stays connected after the course", "Efficient — do what's needed, respect everyone's time", "A safe space to challenge ideas without ego"],
+    data: [7, 11, 13, 12, 11, 9],
   },
   hobbies: {
-    labels: ["Sports","Gym & Fitness","Running & Cycling","Gaming","Reading","Travel","Food & Cooking","Music","Photography & Videography","Investing & Trading","Tech & Gadgets","Outdoor activities","Arts & Crafts","Volunteering","Cars & Motorsport","Family time"],
-    data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    labels: ["Sports (team sports, racquet sports, etc.)", "Gym & fitness", "Running, cycling, or swimming", "Gaming", "Reading", "Travel", "Food — eating it, cooking it, reviewing it", "Music — listening, playing, or both", "Photography & videography", "Investing & trading", "Tech & gadgets", "Outdoor adventures (hiking, diving, etc.)", "Arts & crafts", "Volunteering", "Cars & motorsport", "Family time (yes, it counts)"],
+    data: [9, 4, 9, 3, 2, 10, 8, 5, 2, 3, 3, 3, 0, 0, 2, 9],
   },
   motivators: {
-    labels: ["Clear goals and targets","Recognition from peers","Autonomy and trust","Learning something new","Healthy competition","Teamwork and camaraderie","Purpose and meaning","Financial incentives","Seeing tangible results"],
-    data: [0,0,0,0,0,0,0,0,0]
+    labels: ["Clear goals and targets", "Recognition from peers", "Autonomy and trust", "Learning something new", "Healthy competition", "Teamwork and camaraderie", "Purpose and meaning", "Financial incentives", "Seeing tangible results", "Helping others succeed"],
+    data: [5, 3, 8, 8, 2, 12, 8, 0, 6, 8],
   },
   willingRoles: {
-    labels: ["Syndicate Leader","Deputy Leader","Motivator","Timekeeper","Red Teamer","Boundary Spanner","Scribe","Quality Controller","Social Secretary","Tech Lead","Mediator"],
-    data: [0,0,0,0,0,0,0,0,0,0,0]
+    labels: ["Syndicate Leader — overall coordination and rep", "Deputy Leader — backup and co-pilot", "Motivator — morale, energy, keeping spirits up", "Timekeeper — keep discussions and deadlines on track", "Red Teamer — challenge groupthink, stress-test ideas", "Boundary Spanner — connect with other syndicates, share intel", "Scribe — capture key points, decisions, action items", "Quality Controller — final review before any submission", "Social Secretary — organise meals, bonding, celebrations", "Tech Lead — shared drives, templates, digital tools", "Mediator — navigate disagreements, keep the peace"],
+    data: [3, 5, 3, 6, 7, 3, 0, 2, 3, 2, 6],
   },
-  rules: [],
-  members: [],
-  planningAreaLatLng: {
-    "Ang Mo Kio": [1.3691, 103.8454], "Bedok": [1.3236, 103.9273],
-    "Bishan": [1.3526, 103.8479], "Bukit Batok": [1.3590, 103.7637],
-    "Bukit Merah": [1.2819, 103.8239], "Bukit Panjang": [1.3777, 103.7719],
-    "Bukit Timah": [1.3294, 103.8021], "Choa Chu Kang": [1.3840, 103.7470],
-    "Clementi": [1.3162, 103.7649], "Geylang": [1.3201, 103.8918],
-    "Hougang": [1.3613, 103.8863], "Jurong East": [1.3329, 103.7436],
-    "Jurong West": [1.3404, 103.7090], "Kallang": [1.3100, 103.8636],
-    "Marine Parade": [1.3019, 103.9050], "Novena": [1.3203, 103.8434],
-    "Pasir Ris": [1.3722, 103.9494], "Punggol": [1.3984, 103.9072],
-    "Queenstown": [1.2942, 103.7860], "Sembawang": [1.4491, 103.8185],
-    "Sengkang": [1.3868, 103.8914], "Serangoon": [1.3554, 103.8679],
-    "Tampines": [1.3496, 103.9568], "Toa Payoh": [1.3343, 103.8563],
-    "Woodlands": [1.4382, 103.7891], "Yishun": [1.4304, 103.8354],
-    "Tengah": [1.3691, 103.7359]
-  }
+  rules: [{"norm": "One conversation at a time during discussions", "votes": 9, "pct": 69, "status": "discuss"}, {"norm": "No cliques — rotate who you sit with and work with", "votes": 4, "pct": 31, "status": "dropped"}, {"norm": "Respect quiet hours — no non-urgent messages after 2200 or on weekends", "votes": 5, "pct": 38, "status": "dropped"}, {"norm": "Punctuality — if you're late, you owe the group kopi ☕", "votes": 8, "pct": 62, "status": "discuss"}, {"norm": "Equal contribution — everyone pulls their weight", "votes": 7, "pct": 54, "status": "discuss"}, {"norm": "Constructive feedback only — critique ideas, not people", "votes": 10, "pct": 77, "status": "adopted"}, {"norm": "Vegas rule — what's said in syndicate stays in syndicate", "votes": 7, "pct": 54, "status": "discuss"}, {"norm": "Disagree and commit — once decided, we move as one", "votes": 11, "pct": 85, "status": "adopted"}, {"norm": "Camera on during virtual sessions", "votes": 1, "pct": 8, "status": "dropped"}, {"norm": "Respond to messages within 24 hours", "votes": 1, "pct": 8, "status": "dropped"}],
+  members: [
+    {"name": "Striker", "full_name": "Eugene Chua", "rank": "", "unit": "120 Sqn / PC", "years": "15-20 years", "mobile": "91828039", "email": "c.wenjun88@gmail.com", "planning_area": "Hougang", "primary": "Water", "secondary": "Earth", "best_role": "Mediator", "fun_fact": "I'm fear clowns.", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Travel", "Food — eating it, cooking it, reviewing it", "Family time (yes, it counts)"], "motivation": "Required career milestone — here because I should be"},
+    {"name": "Ilios", "full_name": "Chia Jo-han", "rank": "", "unit": "AFRC / 200 SQN", "years": "10-15 years", "mobile": "92336308", "email": "", "planning_area": "Bukit Timah", "primary": "Air", "secondary": "Water", "best_role": "Social Secretary", "fun_fact": "I've done pilates for more than 7 years", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Gym & fitness", "Running, cycling, or swimming", "Gaming", "Travel", "Food — eating it, cooking it, reviewing it", "Investing & trading", "Cars & motorsport", "Family time (yes, it counts)"], "motivation": "Career progression — it's a stepping stone"},
+    {"name": "Shaft", "full_name": "Caspar Ng", "rank": "", "unit": "805 SQN / APGC", "years": "15-20 years", "mobile": "91817066", "email": "xynkro@gmail.com", "planning_area": "Bedok", "primary": "Earth", "secondary": "Fire", "best_role": "Mover", "fun_fact": "i admire charles bukowski", "hobbies": ["Running, cycling, or swimming", "Reading", "Travel", "Investing & trading", "Tech & gadgets", "Family time (yes, it counts)"], "motivation": "Fresh start — reset, recharge, reflect"},
+    {"name": "Shazi", "full_name": "Mohd Shazi Afizal bin Mohamad Sarif", "rank": "", "unit": "Royal Malaysian Air force", "years": "15-20 years", "mobile": "+60135159687", "email": "shaziafizal86@gmail.com / +6593812028 (SG No - temporary)", "planning_area": "Other (overseas / prefer not to say)", "primary": "Earth", "secondary": "Air", "best_role": "Boundary Spanner", "fun_fact": "I have known and been friends with my wife since childhood.", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Running, cycling, or swimming", "Travel", "Food — eating it, cooking it, reviewing it", "Music — listening, playing, or both", "Family time (yes, it counts)"], "motivation": "Fresh start — reset, recharge, reflect"},
+    {"name": "Marcus", "full_name": "Chan Jun Long Marcus", "rank": "", "unit": "3 DA Bn / Participation Command", "years": "10-15 years", "mobile": "98785812", "email": "marcuschan098@gmail.com", "planning_area": "Hougang", "primary": "Water", "secondary": "Air", "best_role": "Mediator", "fun_fact": "I used to watch a lot of cooking variety shows.", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Food — eating it, cooking it, reviewing it", "Music — listening, playing, or both", "Family time (yes, it counts)"], "motivation": "Career progression — it's a stepping stone"},
+    {"name": "J Mak / Scribbln / Jos / Joslyn", "full_name": "Joslyn Mak", "rank": "", "unit": "119 SQN, AID, 138 SQN", "years": "10-15 years", "mobile": "98323928", "email": "joslynmak@gmail.com", "planning_area": "Sengkang", "primary": "Fire", "secondary": "Earth", "best_role": "Happy to take up any roles :)", "fun_fact": "fun", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Running, cycling, or swimming", "Travel", "Music — listening, playing, or both", "Outdoor adventures (hiking, diving, etc.)"], "motivation": "Building cross-service / cross-domain networks"},
+    {"name": "Film", "full_name": "WG.CDR. Ittichai Nimma", "rank": "", "unit": "Thai Air Force CSC", "years": "10-15 years", "mobile": "89751495", "email": "99ittichai@gmail.com", "planning_area": "Other (overseas / prefer not to say)", "primary": "Water", "secondary": "Air", "best_role": "Red Teamer", "fun_fact": "I once ate buffet 1700-2300", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Running, cycling, or swimming", "Gaming", "Travel", "Photography & videography", "Outdoor adventures (hiking, diving, etc.)"], "motivation": "Building cross-service / cross-domain networks"},
+    {"name": "Desmond", "full_name": "ME5 Desmond Toh Ding Wei", "rank": "", "unit": "Airbase Civil Engineering", "years": "10-15 years", "mobile": "92334940", "email": "dtdw512@gmail.com", "planning_area": "Hougang", "primary": "Earth", "secondary": "Water", "best_role": "Red Teamer", "fun_fact": "On Forex, I once made US$97k a month, and another time, I lost US$50k a day. So that's life!", "hobbies": ["Gym & fitness", "Food — eating it, cooking it, reviewing it", "Family time (yes, it counts)"], "motivation": "Intellectual growth — I genuinely want to learn"},
+    {"name": "Chris", "full_name": "Chris Hampson", "rank": "", "unit": "USAF", "years": "20-25 years", "mobile": "8404 0488", "email": "chris.d.hampson@gmail.com", "planning_area": "Downtown Core", "primary": "Air", "secondary": "Earth", "best_role": "Red Teamer", "fun_fact": "I can accurately misquote almost any movie.", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Gym & fitness", "Running, cycling, or swimming", "Gaming", "Reading", "Travel", "Food — eating it, cooking it, reviewing it", "Music — listening, playing, or both", "Tech & gadgets", "Outdoor adventures (hiking, diving, etc.)", "Cars & motorsport", "Family time (yes, it counts)"], "motivation": "Intellectual growth — I genuinely want to learn"},
+    {"name": "De Hong", "full_name": "Yeo De Hong", "rank": "", "unit": "DMD", "years": "10-15 years", "mobile": "97711850", "email": "yeodehong91@hotmail.com", "planning_area": "Punggol", "primary": "Air", "secondary": "Earth", "best_role": "Red Teamer", "fun_fact": "Once during my solo trip when I was 18, I was late to the airport but managed to board the plane just 5mins after arriving at the airport. Check-in, immigration & baggage checks included", "hobbies": ["Travel", "Food — eating it, cooking it, reviewing it", "Investing & trading", "Family time (yes, it counts)"], "motivation": "Building cross-service / cross-domain networks"},
+    {"name": "Edwin or Wawa", "full_name": "Edwin Tan “Wawa”", "rank": "", "unit": "127 SQN / HQ HeliG", "years": "15-20 years", "mobile": "91553387", "email": "", "planning_area": "Pasir Ris", "primary": "Earth", "secondary": "Air", "best_role": "Boundary Spanner", "fun_fact": "I used to be in a Thai band playing at the old Goldenmile Complex", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Gym & fitness", "Running, cycling, or swimming", "Travel", "Food — eating it, cooking it, reviewing it", "Music — listening, playing, or both", "Family time (yes, it counts)"], "motivation": "Intellectual growth — I genuinely want to learn"},
+    {"name": "Josh", "full_name": "Joshua Ong", "rank": "", "unit": "116 sqn", "years": "10-15 years", "mobile": "83991495", "email": "", "planning_area": "Bukit Batok", "primary": "Fire", "secondary": "Air", "best_role": "Slide maker hahaha", "fun_fact": "Let me get back to you on this haha", "hobbies": ["Running, cycling, or swimming", "Travel", "Photography & videography", "Tech & gadgets"], "motivation": "Building cross-service / cross-domain networks"},
+    {"name": "Siri", "full_name": "Siritape", "rank": "", "unit": "507 APGC", "years": "15-20 years", "mobile": "96870127", "email": "Yonghua.teo@gmail.com", "planning_area": "Bedok", "primary": "Water", "secondary": "Water", "best_role": "Logs", "fun_fact": "I have license to drive boat if you believe", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Running, cycling, or swimming"], "motivation": "Career progression — it's a stepping stone"},
+  ],
+  planningAreaLatLng: {"Ang Mo Kio": [1.3691, 103.8454], "Bedok": [1.3236, 103.9273], "Bishan": [1.3526, 103.8479], "Bukit Batok": [1.359, 103.7637], "Bukit Merah": [1.2819, 103.8239], "Bukit Panjang": [1.3777, 103.7719], "Bukit Timah": [1.3294, 103.8021], "Choa Chu Kang": [1.384, 103.747], "Clementi": [1.3162, 103.7649], "Geylang": [1.3201, 103.8918], "Hougang": [1.3613, 103.8863], "Jurong East": [1.3329, 103.7436], "Jurong West": [1.3404, 103.709], "Kallang": [1.31, 103.8636], "Marine Parade": [1.3019, 103.905], "Novena": [1.3203, 103.8434], "Pasir Ris": [1.3722, 103.9494], "Punggol": [1.3984, 103.9072], "Queenstown": [1.2942, 103.786], "Sembawang": [1.4491, 103.8185], "Sengkang": [1.3868, 103.8914], "Serangoon": [1.3554, 103.8679], "Tampines": [1.3496, 103.9568], "Toa Payoh": [1.3343, 103.8563], "Woodlands": [1.4382, 103.7891], "Yishun": [1.4304, 103.8354], "Tengah": [1.3691, 103.7359], "Downtown Core": [1.282, 103.8541], "Outram": [1.2814, 103.8395], "Rochor": [1.3033, 103.8528], "River Valley": [1.2935, 103.8329], "Orchard": [1.3048, 103.8318], "Newton": [1.3127, 103.8385]},
 };
 
 // ==================== RENDER FUNCTIONS ====================
