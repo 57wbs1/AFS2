@@ -131,6 +131,28 @@
   .tag-water { border-color: var(--water); color: var(--water); background: var(--water-bg); }
   .tag-air { border-color: var(--air); color: var(--air); background: var(--air-bg); }
 
+  /* TETRA GROUP GRID */
+  .tetra-group-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.25rem;
+  }
+  @media (max-width: 700px) { .tetra-group-grid { grid-template-columns: repeat(2, 1fr); } }
+  .tetra-group-card {
+    background: var(--card); border-radius: 10px; padding: 1rem;
+    border: 1px solid var(--border);
+  }
+  .tetra-group-header {
+    font-weight: 700; font-size: 0.85rem; margin-bottom: 0.6rem;
+    display: flex; align-items: center; gap: 0.4rem; padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .tetra-group-member {
+    font-size: 0.82rem; color: var(--text); padding: 3px 0;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .tetra-group-secondary {
+    font-size: 0.68rem; padding: 1px 5px; border-radius: 6px; font-weight: 600; flex-shrink: 0;
+  }
+
   /* TETRA ELEMENT BADGE */
   .tetra-badge {
     display: inline-flex; align-items: center; gap: 4px;
@@ -275,6 +297,7 @@
         <div class="chart-wrap"><canvas id="tetra6DChart"></canvas></div>
       </div>
     </div>
+    <div id="tetraGroupGrid" class="tetra-group-grid"></div>
   </div>
 
   <!-- VISION -->
@@ -291,6 +314,7 @@
         <div class="chart-wrap"><canvas id="synVisionChart"></canvas></div>
       </div>
     </div>
+    <div id="visionDraft"></div>
   </div>
 
   <!-- PEOPLE -->
@@ -372,13 +396,13 @@
     <p class="section-subtitle">Our collective agreement — synthesised from all responses</p>
     <div style="background:var(--card);border-radius:12px;padding:1.5rem;border:1px solid var(--border);">
       <h3 style="color:var(--header-bg);margin-bottom:0.75rem;">Our Vision</h3>
-      <p class="placeholder">Vision statement will be synthesised from responses...</p>
-      <h3 style="color:var(--header-bg);margin:1rem 0 0.75rem;">Our Rules</h3>
-      <p class="placeholder">Norms with >70% consensus will appear here...</p>
-      <h3 style="color:var(--header-bg);margin:1rem 0 0.75rem;">Our Roles</h3>
-      <p class="placeholder">Final role assignments...</p>
-      <h3 style="color:var(--header-bg);margin:1rem 0 0.75rem;">Our Relationships</h3>
-      <p class="placeholder">How we work together...</p>
+      <div id="charterVision" class="placeholder">Vision will be synthesised from responses...</div>
+      <h3 style="color:var(--header-bg);margin:1.25rem 0 0.75rem;">Our Rules</h3>
+      <div id="charterRules" class="placeholder">Rules will appear here...</div>
+      <h3 style="color:var(--header-bg);margin:1.25rem 0 0.75rem;">Our Roles</h3>
+      <div id="charterRoles" class="placeholder">Role assignments will appear here...</div>
+      <h3 style="color:var(--header-bg);margin:1.25rem 0 0.75rem;">Our Relationships</h3>
+      <div id="charterRelationships" class="placeholder">How we work together...</div>
     </div>
   </div>
 
@@ -520,6 +544,15 @@ const DATA = {
     labels: ["Syndicate Leader — overall coordination and rep", "Deputy Leader — backup and co-pilot", "Motivator — morale, energy, keeping spirits up", "Timekeeper — keep discussions and deadlines on track", "Red Teamer — challenge groupthink, stress-test ideas", "Boundary Spanner — connect with other syndicates, share intel", "Scribe — capture key points, decisions, action items", "Quality Controller — final review before any submission", "Social Secretary — organise meals, bonding, celebrations", "Tech Lead — shared drives, templates, digital tools", "Mediator — navigate disagreements, keep the peace"],
     data: [3, 5, 3, 6, 7, 3, 0, 2, 3, 2, 6],
   },
+  relType: {
+    labels: ["Professional respect — collaborate well during course hours", "Genuine friendships — socialise and stay connected", "Mentoring — learn from each other's experience", "Healthy competition — push each other to be better", "Psychological safety — able to be vulnerable and honest", "Efficient teamwork — get stuff done"],
+    data: [8, 12, 5, 3, 10, 13],
+  },
+  commPref: {
+    labels: ["WhatsApp group chat", "Face-to-face whenever possible", "Phone calls for anything urgent", "Email for formal stuff", "Shared Google Drive or Notion for docs", "Small breakout chats for sub-tasks", "Telegram group chat"],
+    data: [6, 10, 6, 1, 9, 7, 1],
+  },
+  conflictStyles: {"Address it directly with the person — clear the air fast": 5, "Give it time — let things cool down first": 1, "Prefer a mediator or third party to help": 1, "Depends on the situation — I adapt": 5, "Talk it out with the other party - within 24 hours": 1},
   rules: [{"norm": "One conversation at a time during discussions", "votes": 9, "pct": 69, "status": "discuss"}, {"norm": "No cliques — rotate who you sit with and work with", "votes": 4, "pct": 31, "status": "dropped"}, {"norm": "Respect quiet hours — no non-urgent messages after 2200 or on weekends", "votes": 5, "pct": 38, "status": "dropped"}, {"norm": "Punctuality — if you're late, you owe the group kopi ☕", "votes": 8, "pct": 62, "status": "discuss"}, {"norm": "Equal contribution — everyone pulls their weight", "votes": 7, "pct": 54, "status": "discuss"}, {"norm": "Constructive feedback only — critique ideas, not people", "votes": 10, "pct": 77, "status": "adopted"}, {"norm": "Vegas rule — what's said in syndicate stays in syndicate", "votes": 7, "pct": 54, "status": "discuss"}, {"norm": "Disagree and commit — once decided, we move as one", "votes": 11, "pct": 85, "status": "adopted"}, {"norm": "Camera on during virtual sessions", "votes": 1, "pct": 8, "status": "dropped"}, {"norm": "Respond to messages within 24 hours", "votes": 1, "pct": 8, "status": "dropped"}],
   members: [
     {"name": "Striker", "full_name": "Eugene Chua", "rank": "", "unit": "120 Sqn / PC", "years": "15-20 years", "mobile": "91828039", "email": "c.wenjun88@gmail.com", "planning_area": "Hougang", "primary": "Water", "secondary": "Earth", "best_role": "Mediator", "fun_fact": "I'm fear clowns.", "hobbies": ["Sports (team sports, racquet sports, etc.)", "Travel", "Food — eating it, cooking it, reviewing it", "Family time (yes, it counts)"], "motivation": "Required career milestone — here because I should be", "photo_url": "https://drive.google.com/uc?export=view&id=12EddIX_Ckt9j94hr0weL7-M6dJO32Sje"},
@@ -784,6 +817,139 @@ function initCharts() {
   renderContacts();
   renderRules();
   renderRoleAssignments();
+  renderTetraGroups();
+  renderVisionDraft();
+  renderCharterDraft();
+}
+
+// ==================== TETRA GROUP GRID ====================
+function renderTetraGroups() {
+  const container = document.getElementById('tetraGroupGrid');
+  if (!container || !DATA.members.length) return;
+  const ELEM_INFO = {
+    Fire:  { icon: '🔥', label: 'Fire — Driver',       cls: 'tetra-fire',  color: 'var(--fire)'  },
+    Earth: { icon: '🌍', label: 'Earth — Stabiliser',  cls: 'tetra-earth', color: 'var(--earth)' },
+    Water: { icon: '💧', label: 'Water — Influencer',  cls: 'tetra-water', color: 'var(--water)' },
+    Air:   { icon: '🌬️', label: 'Air — Analyser',     cls: 'tetra-air',   color: 'var(--air)'   },
+  };
+  const byElem = { Fire: [], Earth: [], Water: [], Air: [] };
+  DATA.members.forEach(m => { if (m.primary && byElem[m.primary]) byElem[m.primary].push(m); });
+  container.innerHTML = ['Fire','Earth','Water','Air'].map(elem => {
+    const info = ELEM_INFO[elem];
+    const members = byElem[elem];
+    const rows = members.length
+      ? members.map(m => {
+          const secBadge = m.secondary && m.secondary !== m.primary
+            ? '<span class="tetra-group-secondary ' + (ELEMENT_TAG_CLASS[m.secondary] || '') + '">+' + escapeHTML(m.secondary) + '</span>'
+            : '';
+          return '<div class="tetra-group-member">' + secBadge + escapeHTML(m.name) + '</div>';
+        }).join('')
+      : '<div class="tetra-group-member" style="font-style:italic;opacity:0.5">—</div>';
+    return '<div class="tetra-group-card">' +
+      '<div class="tetra-group-header" style="border-color:' + info.color + ';color:' + info.color + '">' +
+        info.icon + ' ' + escapeHTML(info.label) +
+        '<span style="margin-left:auto;font-size:0.8rem;opacity:0.6">×' + members.length + '</span>' +
+      '</div>' + rows + '</div>';
+  }).join('');
+}
+
+// ==================== VISION DRAFT ====================
+function renderVisionDraft() {
+  const container = document.getElementById('visionDraft');
+  if (!container || !DATA.synVision) return;
+  const topVision = DATA.synVision.labels
+    .map((l, i) => ({ label: l, n: DATA.synVision.data[i] }))
+    .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 4);
+  const topSuccess = DATA.success.labels
+    .map((l, i) => ({ label: l, n: DATA.success.data[i] }))
+    .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 4);
+  const N = DATA.members.length;
+  container.innerHTML =
+    '<div style="background:var(--card);border-radius:12px;padding:1.25rem 1.5rem;border:1px solid var(--border);margin-top:1rem;">' +
+    '<p style="font-size:0.7rem;font-weight:700;letter-spacing:0.08em;color:var(--text-dim);text-transform:uppercase;margin-bottom:0.75rem;">📝 Draft — Caspar to finalise after VRRR</p>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">' +
+    '<div>' +
+    '<p style="font-size:0.85rem;font-weight:600;color:var(--header-bg);margin-bottom:0.5rem;">What we envision for our syndicate</p>' +
+    topVision.map(v => '<div style="font-size:0.85rem;padding:3px 0;display:flex;justify-content:space-between;align-items:center;">' +
+      '<span>✓ ' + escapeHTML(v.label) + '</span>' +
+      '<span style="color:var(--text-dim);font-size:0.75rem;margin-left:0.5rem;white-space:nowrap;">' + v.n + '/' + N + '</span>' +
+      '</div>').join('') +
+    '</div>' +
+    '<div>' +
+    '<p style="font-size:0.85rem;font-weight:600;color:var(--header-bg);margin-bottom:0.5rem;">What success looks like</p>' +
+    topSuccess.map(v => '<div style="font-size:0.85rem;padding:3px 0;display:flex;justify-content:space-between;align-items:center;">' +
+      '<span>✓ ' + escapeHTML(v.label) + '</span>' +
+      '<span style="color:var(--text-dim);font-size:0.75rem;margin-left:0.5rem;white-space:nowrap;">' + v.n + '/' + N + '</span>' +
+      '</div>').join('') +
+    '</div>' +
+    '</div></div>';
+}
+
+// ==================== CHARTER DRAFT ====================
+function renderCharterDraft() {
+  const N = DATA.members.length;
+
+  // — Our Vision —
+  const vEl = document.getElementById('charterVision');
+  if (vEl && DATA.synVision) {
+    const top = DATA.synVision.labels
+      .map((l, i) => ({ label: l, n: DATA.synVision.data[i] }))
+      .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 4);
+    vEl.innerHTML = top.map(v =>
+      '<div style="font-size:0.9rem;padding:3px 0;">✓ ' + escapeHTML(v.label) +
+      ' <span style="color:var(--text-dim);font-size:0.78rem;">(' + v.n + '/' + N + ')</span></div>'
+    ).join('') + '<p style="font-size:0.72rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Draft — Caspar to finalise</p>';
+  }
+
+  // — Our Rules (adopted ≥70%) —
+  const rEl = document.getElementById('charterRules');
+  if (rEl && DATA.rules) {
+    const adopted = DATA.rules.filter(r => r.status === 'adopted');
+    const discuss = DATA.rules.filter(r => r.status === 'discuss');
+    rEl.innerHTML =
+      (adopted.length
+        ? '<p style="font-size:0.8rem;font-weight:700;color:#27ae60;margin-bottom:0.35rem;">ADOPTED (≥70%)</p>' +
+          adopted.map(r => '<div style="font-size:0.85rem;padding:2px 0;">✓ ' + escapeHTML(r.norm) + ' <span style="color:var(--text-dim);font-size:0.75rem;">(' + r.pct + '%)</span></div>').join('')
+        : '') +
+      (discuss.length
+        ? '<p style="font-size:0.8rem;font-weight:700;color:#d4a017;margin:0.75rem 0 0.35rem;">TO DISCUSS (50–70%)</p>' +
+          discuss.map(r => '<div style="font-size:0.85rem;padding:2px 0;">• ' + escapeHTML(r.norm) + ' <span style="color:var(--text-dim);font-size:0.75rem;">(' + r.pct + '%)</span></div>').join('')
+        : '');
+  }
+
+  // — Our Roles —
+  const rolesEl = document.getElementById('charterRoles');
+  if (rolesEl) {
+    const byRole = {};
+    DATA.members.forEach(m => { if (m.best_role) (byRole[m.best_role] = byRole[m.best_role] || []).push(m.name); });
+    rolesEl.innerHTML = Object.entries(byRole).length
+      ? Object.entries(byRole).map(([role, names]) =>
+          '<div style="font-size:0.85rem;padding:3px 0;"><strong>' + escapeHTML(role) + '</strong>: ' + names.map(escapeHTML).join(', ') + '</div>'
+        ).join('')
+      : '<p style="font-size:0.85rem;color:var(--text-dim);">No role selections yet.</p>';
+  }
+
+  // — Our Relationships —
+  const relEl = document.getElementById('charterRelationships');
+  if (relEl && DATA.relType && DATA.commPref) {
+    const topRel = DATA.relType.labels
+      .map((l, i) => ({ label: l, n: DATA.relType.data[i] }))
+      .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 5);
+    const topComm = DATA.commPref.labels
+      .map((l, i) => ({ label: l, n: DATA.commPref.data[i] }))
+      .filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 4);
+    const conflictEntries = Object.entries(DATA.conflictStyles || {})
+      .filter(([, v]) => v > 0).sort(([, a], [, b]) => b - a);
+    relEl.innerHTML =
+      '<p style="font-size:0.8rem;font-weight:700;color:var(--header-bg);margin-bottom:0.35rem;">How we want to relate</p>' +
+      topRel.map(v => '<div style="font-size:0.85rem;padding:2px 0;">✓ ' + escapeHTML(v.label) + ' <span style="color:var(--text-dim);font-size:0.75rem;">(' + v.n + '/' + N + ')</span></div>').join('') +
+      '<p style="font-size:0.8rem;font-weight:700;color:var(--header-bg);margin:0.75rem 0 0.35rem;">How we communicate</p>' +
+      topComm.map(v => '<div style="font-size:0.85rem;padding:2px 0;">✓ ' + escapeHTML(v.label) + ' <span style="color:var(--text-dim);font-size:0.75rem;">(' + v.n + '/' + N + ')</span></div>').join('') +
+      (conflictEntries.length
+        ? '<p style="font-size:0.8rem;font-weight:700;color:var(--header-bg);margin:0.75rem 0 0.35rem;">When there\'s a disagreement</p>' +
+          conflictEntries.map(([l, n]) => '<div style="font-size:0.85rem;padding:2px 0;">• ' + escapeHTML(l) + ' <span style="color:var(--text-dim);font-size:0.75rem;">(' + n + ')</span></div>').join('')
+        : '');
+  }
 }
 
 function _initChartsPlaceholder_REMOVED() {
